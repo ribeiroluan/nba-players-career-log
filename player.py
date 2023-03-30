@@ -126,11 +126,11 @@ class DataWriter():
             if datetime.strptime(f.split('\\', 1)[1].split('-')[2][:8], "%Y%m%d").date() < datetime.now().date():
                 os.remove(f)
 
-    def clean_data(self):
+    def _clean_data(self):
         return DataCleaner(self.data, self.player.season_type).clean()
         
     def write(self) -> None:
         """Write career log to csv"""
         self._clean_folder()
-        self.clean_data().to_csv("tmp/"+self._get_filename()+'.csv', index=False)
+        self._clean_data().to_csv("tmp/"+self._get_filename()+'.csv', index=False)
         logger.info(f"Career data wrote to {self._get_filename() + '.csv'} successfully")
