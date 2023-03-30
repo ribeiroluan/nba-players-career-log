@@ -42,7 +42,7 @@ class UploadToS3:
             if error_code == "404":
                 exists = False
         if not exists:
-            conn.create_bucket(Bucket=self.bucket_name)
+            conn.create_bucket(Bucket=self.bucket_name,  CreateBucketConfiguration={'LocationConstraint': 'sa-east-1'})
 
     def upload_files_to_s3(self, conn):
         """Upload files to S3 Bucket if they don't already exist there"""
@@ -52,7 +52,7 @@ class UploadToS3:
             player = filename.split('\\', 1)[1].split('-')[0]
             extracted_at = datetime.datetime.strptime(filename.split('\\', 1)[1].split('-')[2][:8], "%Y%m%d").date()
             season_type = filename.split('\\', 1)[1].split('-')[1]
-            s3_key = f'/{player}/{extracted_at}/{season_type}.csv'
+            s3_key = f'{player}/{extracted_at}/{season_type}.csv'
 
             try:
                 #makes sure object does not exist in S3 bucket
