@@ -62,7 +62,8 @@ class PlayerCareer():
         
         if self._check_if_player_exists() and self._check_if_season_type_exists():
             
-            year = self.player_first_year
+            #year = self.player_first_year
+            year = 2021
             career_dict = []
 
             while year <= self.player_last_year:
@@ -71,7 +72,7 @@ class PlayerCareer():
                         player_id_nullable = self.player_id, 
                         season_nullable = self._adjust_season(year),
                         season_type_nullable=self.season_type
-                        ).get_data_frames()[0].sort_values('GAME_DATE', ascending = True, ignore_index=True)
+                        ).get_data_frames()[0]
                 logger.info(f"Getting data for {self.player_full_name} for the {self._adjust_season(year)} {self.season_type}")
                 career_dict.append(season_log)
                 year += 1
@@ -82,6 +83,28 @@ class PlayerCareer():
         else:
             logger.error(f"Player {self.player_full_name} does not exist or {self.season_type} is not available")
 
+
+class DataCleaner():
+    
+    def __init__(self, data:pd.DataFrame, season_type:str):
+        self.data = data
+        self.season_type = season_type
+
+    def _sort_values(self, data:pd.DataFrame):
+        return data.sort_values('GAME_DATE', ascending = True, ignore_index=True)
+    
+    def _add_season_type_column(self, data:pd.DataFrame):
+        data['SEASON_TYPE'] = self.season_type
+        return  self.data
+
+    def _remove_unwanted_columns(self, data:pd.DataFrame):
+        for column in data.columns:
+            if "RANK" in column or column in ['WNBA_FANTASY_PTS', 'VIDEO_AVAILABLE_FLAG']:
+                data.drop(column, axis=1, inplace=True)
+        return data
+    
+    def clean(self):
+        return self._remove_unwanted_columns(self._add_season_type_column(self._sort_values(self.data)))
 
 class DataWriter():
 
@@ -100,8 +123,11 @@ class DataWriter():
             if datetime.strptime(f.split('\\', 1)[1].split('-')[2][:8], "%Y%m%d").date() < datetime.now().date():
                 os.remove(f)
 
+    def clean_data(self):
+        return DataCleaner(self.data, self.player.season_type).clean()
+        
     def write(self) -> None:
         """Write career log to csv"""
         self._clean_folder()
-        self.data.to_csv("tmp/"+self._get_filename()+'.csv', index=False)
+        self.clean_data().to_csv("tmp/"+self._get_filename()+'.csv', index=False)
         logger.info(f"Career data wrote to {self._get_filename() + '.csv'} successfully")
