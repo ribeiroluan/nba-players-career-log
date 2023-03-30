@@ -133,5 +133,4 @@ class CleanFolder():
         """Clean temp folder"""
         files = glob.glob("tmp/*.csv")
         for f in files:
-            #if datetime.strptime(f.split('\\', 1)[1].split('-')[2][:8], "%Y%m%d").date() < datetime.now().date():
             os.remove(f)
