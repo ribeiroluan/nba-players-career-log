@@ -1,6 +1,5 @@
 import boto3
 import logging
-from botocore import exceptions
 from botocore.exceptions import ClientError
 from os import getenv
 from dotenv import load_dotenv
@@ -11,6 +10,7 @@ import datetime
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 class UploadToS3:
 

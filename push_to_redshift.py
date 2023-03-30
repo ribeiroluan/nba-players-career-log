@@ -1,12 +1,9 @@
 import boto3
 import logging
-from botocore import exceptions
-from botocore.exceptions import ClientError
 from os import getenv
 from dotenv import load_dotenv
 import sys
 import psycopg2
-from psycopg2.sql import Identifier, SQL
 import logging
 import datetime
 
