@@ -93,9 +93,13 @@ class DataCleaner():
     def _sort_values(self, data:pd.DataFrame):
         return data.sort_values('GAME_DATE', ascending = True, ignore_index=True)
     
+    def _fix_date_format(self, data:pd.DataFrame):
+        data['GAME_DATE'] = pd.to_datetime(data['GAME_DATE'], format="%Y-%m-%dT%H:%M:%S")
+        return data
+     
     def _add_season_type_column(self, data:pd.DataFrame):
         data['SEASON_TYPE'] = self.season_type
-        return  self.data
+        return data
 
     def _remove_unwanted_columns(self, data:pd.DataFrame):
         for column in data.columns:
@@ -104,7 +108,7 @@ class DataCleaner():
         return data
     
     def clean(self):
-        return self._remove_unwanted_columns(self._add_season_type_column(self._sort_values(self.data)))
+        return self._remove_unwanted_columns(self._add_season_type_column(self._fix_date_format(self._sort_values(self.data))))
 
 class DataWriter():
 
