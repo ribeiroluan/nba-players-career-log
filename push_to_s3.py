@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO)
 class UploadToS3:
 
     def __init__(self):
+        """Load AWS credentials"""
         load_dotenv('.env')
         self.aws_id = getenv('AWS_ID')
         self.aws_key = getenv('AWS_KEY')
