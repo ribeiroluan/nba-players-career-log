@@ -12,7 +12,6 @@ import datetime
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-
 class UploadToS3:
 
     def __init__(self):
