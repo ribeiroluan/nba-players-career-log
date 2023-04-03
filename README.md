@@ -19,4 +19,4 @@ The project aimed to take advantage of NBA data, which is something that I am re
 ## Output
 `PowerBI dashboard goes here`
 
-## Setup
+## Installation
