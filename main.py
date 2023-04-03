@@ -7,5 +7,5 @@ if __name__ == "__main__":
         curry = PlayerCareer(player_full_name="Stephen Curry", season_type=season_type_var)
         DataWriter(player=curry).write()
         UploadToS3().upload()
-        UploadToRedshift().copy()
+        UploadToRedshift(season_type = season_type_var.lower().replace(' ', '')).copy()
         CleanFolder().clean_folder()

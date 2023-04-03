@@ -12,7 +12,8 @@ logging.basicConfig(level=logging.INFO)
 
 class UploadToRedshift:
 
-    def __init__(self):
+    def __init__(self, season_type:str):
+        self.season_type = season_type
         """Load AWS credentials"""
         load_dotenv('.env')
         self.aws_id = getenv('AWS_ID')
@@ -43,7 +44,7 @@ class UploadToRedshift:
         return latest['Key'].split('/')[1]
 
     def get_filepath(self):
-        return f"s3://{self.bucket_name}/stephencurry/{self.get_latest_upload_date()}/regularseason.csv"
+        return f"s3://{self.bucket_name}/stephencurry/{self.get_latest_upload_date()}/{self.season_type}.csv"
 
     def connect_to_redshift(self):
         """Connect to Redshift instance"""
@@ -57,10 +58,10 @@ class UploadToRedshift:
             sys.exit(1)
 
     def sql_drop_old_table(self):
-        return f"DROP TABLE IF EXISTS {self.table_name};"
+        return f"DROP TABLE IF EXISTS {self.table_name+'_'+self.season_type};"
         
-    def sql_create_new_table(self):
-        return f""" CREATE TABLE {self.table_name} (
+    def sql_create_new_table(self, ):
+        return f""" CREATE TABLE {self.table_name+'_'+self.season_type} (
                     GAME_ID int PRIMARY KEY,
                     GAME_DATE timestamp,
                     SEASON_TYPE varchar,
@@ -100,9 +101,16 @@ class UploadToRedshift:
                     TD3 bool);"""
     
     def sql_copy_to_table(self):
-        return f""" COPY {self.table_name} (SEASON_YEAR,PLAYER_ID,PLAYER_NAME,NICKNAME,TEAM_ID,TEAM_ABBREVIATION,TEAM_NAME,GAME_ID,GAME_DATE,MATCHUP,WL,MIN,FGM,FGA,FG_PCT,FG3M,FG3A,FG3_PCT,FTM,FTA,FT_PCT,OREB,DREB,REB,AST,TOV,STL,BLK,BLKA,PF,PFD,PTS,PLUS_MINUS,NBA_FANTASY_PTS,DD2,TD3,SEASON_TYPE)
+        return f""" COPY {self.table_name+'_'+self.season_type} (SEASON_YEAR,PLAYER_ID,PLAYER_NAME,NICKNAME,TEAM_ID,TEAM_ABBREVIATION,TEAM_NAME,GAME_ID,GAME_DATE,MATCHUP,WL,MIN,FGM,FGA,FG_PCT,FG3M,FG3A,FG3_PCT,FTM,FTA,FT_PCT,OREB,DREB,REB,AST,TOV,STL,BLK,BLKA,PF,PFD,PTS,PLUS_MINUS,NBA_FANTASY_PTS,DD2,TD3,SEASON_TYPE)
                     FROM '{self.get_filepath()}'  iam_role '{self.role}' IGNOREHEADER 1 DELIMITER ',' CSV;""" 
 
+    def sql_create_consolidated_table(self):
+        return f""" DROP TABLE IF EXISTS {self.table_name};
+                    CREATE TABLE {self.table_name} (LIKE {self.table_name+'_'+self.season_type});
+                    INSERT INTO {self.table_name} 
+                    SELECT * FROM public.{self.table_name}_regularseason UNION ALL SELECT * FROM public.{self.table_name}_playoffs;
+                    """
+    
     def load_data_into_redshift(self, rs_conn):
         """Load data from S3 into Redshift"""
         with rs_conn:
@@ -113,10 +121,24 @@ class UploadToRedshift:
                 cur.execute(self.sql_copy_to_table())
                 rs_conn.commit()
                 logger.info(f"S3 file {self.get_filepath()} uploaded to Redshift at {datetime.datetime.now()}")
+                
             except:
                 logger.info(f"Error copying S3 file {self.get_filepath()} to Redshift at {datetime.datetime.now()}")
+
+    def create_consolidated_career_table(self, rs_conn):
+        if self.season_type == 'playoffs':
+            with rs_conn:
+                try:
+                    cur = rs_conn.cursor()
+                    cur.execute(self.sql_create_consolidated_table())
+                    rs_conn.commit()
+                    logger.info(f"Consolidated table {self.table_name} created on Redshift at {datetime.datetime.now()}")
+
+                except:
+                    logger.info(f"Error trying to consolidate Regular Season and Playoff tables at {datetime.datetime.now()}")
                 
     def copy(self):
         """Upload file from S3 to Redshift Table"""
         rs_conn = self.connect_to_redshift()
         self.load_data_into_redshift(rs_conn)
+        self.create_consolidated_career_table(rs_conn)
