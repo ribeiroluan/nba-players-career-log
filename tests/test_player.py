@@ -3,6 +3,8 @@ from unittest.mock import patch
 from player import PlayerCareer, DataWriter
 import datetime
 
+
+#Unit tests are not exhaustive
 class TestPlayerCareer:
     
     @patch(target="nba_api.stats.static.players.find_players_by_full_name", return_value=["Player data 1", "Player data 2"])
