@@ -31,6 +31,10 @@ class TestPlayerCareer:
         actual = player.player_id
         expected = 1234
         assert actual == expected
+
+    def test_player_first_year(self):
+        pass
+        
 class TestDataCleaner:
     pass
 
