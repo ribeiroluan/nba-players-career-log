@@ -1,6 +1,7 @@
 import pytest
-from unittest.mock import patch, mock_open
-from player import PlayerCareer
+from unittest.mock import patch
+from player import PlayerCareer, DataWriter
+import datetime
 
 class TestPlayerCareer:
     
@@ -32,14 +33,23 @@ class TestPlayerCareer:
         expected = 1234
         assert actual == expected
 
-    def test_player_first_year(self):
-        pass
-        
-class TestDataCleaner:
-    pass
+    @pytest.mark.parametrize(
+            "year, expected",
+            [
+                (2021, "2021-22"), 
+                (2000, "2000-01"), 
+                (3007, "3007-08"),
+            ]
+        )
+    def test_adjust_season(self, year, expected):
+        player = PlayerCareer(player_full_name="Valid player name", season_type="Valid season type")
+        actual = player._adjust_season(year)
+        assert actual == expected
 
 class TestDataWriter:
-    pass
-
-class TestCleanFolder:
-    pass
+    
+    def test_get_filename(self):
+        player = PlayerCareer(player_full_name="Valid player name", season_type="Valid season type")
+        actual = DataWriter(player=player)._get_filename()
+        expected = f"validplayername-validseasontype-{datetime.datetime.today().strftime('%Y%m%d')}"
+        assert actual == expected
