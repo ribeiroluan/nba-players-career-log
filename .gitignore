@@ -210,4 +210,4 @@ pip-selfcheck.json
 .venv
 tmp
 .env
-.gitignore
+glue_job.py
