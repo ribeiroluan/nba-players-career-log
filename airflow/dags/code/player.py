@@ -65,7 +65,7 @@ class PlayerCareer():
             career_dict = []
 
             while year <= self.player_last_year:
-                time.sleep(15) #avoiding timeouts
+                time.sleep(10) #avoiding timeouts
                 season_log = playergamelogs.PlayerGameLogs(
                         player_id_nullable = self.player_id, 
                         season_nullable = self._adjust_season(year),
