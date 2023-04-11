@@ -208,6 +208,7 @@ pip-selfcheck.json
 
 # Personal
 .venv
-tmp
 .env
-glue_job.py
+tmp
+logs
+plugins
