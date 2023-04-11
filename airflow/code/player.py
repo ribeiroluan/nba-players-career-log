@@ -61,7 +61,7 @@ class PlayerCareer():
         
         if self._check_if_player_exists() and self._check_if_season_type_exists():
             
-            year = self.player_first_year
+            year = 2021 #self.player_first_year
             career_dict = []
 
             while year <= self.player_last_year:
@@ -123,13 +123,13 @@ class DataWriter():
         
     def write(self) -> None:
         """Write career log to csv"""
-        self._clean_data().to_csv(f"airflow/dags/scripts/tmp/{self._get_filename()}.csv", index=False)
+        self._clean_data().to_csv("/opt/airflow/code/tmp/"+self._get_filename()+".csv", index=False)
         logger.info(f"Career data wrote to {self._get_filename() + '.csv'} successfully")
 
 class CleanFolder():
 
     def clean_folder(self):
         """Clean temp folder"""
-        files = glob.glob("airflow/dags/scripts/tmp/*.csv")
+        files = glob.glob("/opt/airflow/code/tmp/*.csv")
         for f in files:
             os.remove(f)

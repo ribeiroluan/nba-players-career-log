@@ -1,26 +1,27 @@
 import airflow
 from airflow import DAG
-from airflow.operators.python import PythonOperator
-from code.player import PlayerCareer, DataCleaner, DataWriter, CleanFolder
-from code.push_to_s3 import UploadToS3
-from code.push_to_redshift import UploadToRedshift
+from airflow.operators.bash import BashOperator
+from airflow.utils.dates import days_ago
+#from code.player import PlayerCareer, DataCleaner, DataWriter, CleanFolder
+#from code.push_to_s3 import UploadToS3
+#from code.push_to_redshift import UploadToRedshift
 from datetime import datetime, timedelta
 
-player = PlayerCareer(player_full_name="Stephen Curry", season_type='Regular Season')
-
+schedule_interval = '@daily'
+start_date = days_ago(1)
 args = {
     'owner': 'luan',
     'start_date': airflow.utils.dates.days_ago(0),
 }
 
-dag = DAG(
+with DAG(
     dag_id= 'nba-player-career-log',
     default_args= args,
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60)
-)
+) as dag:
 
-task1 = PythonOperator(
-    task_id = "extract-data",
-    python_callable = DataWriter(player=player).write(),
-    dag=dag)
+    extract_data = BashOperator(
+        task_id = "extract-data",
+        bash_command = "python /opt/airflow/code/main.py" ,
+        dag=dag)
