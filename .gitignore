@@ -211,3 +211,4 @@ pip-selfcheck.json
 tmp
 .env
 glue_job.py
+credenciais.txt
