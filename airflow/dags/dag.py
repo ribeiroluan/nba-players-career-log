@@ -1,9 +1,9 @@
 import airflow
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from scripts.player import PlayerCareer, DataCleaner, DataWriter, CleanFolder
-from scripts.push_to_s3 import UploadToS3
-from scripts.push_to_redshift import UploadToRedshift
+from code.player import PlayerCareer, DataCleaner, DataWriter, CleanFolder
+from code.push_to_s3 import UploadToS3
+from code.push_to_redshift import UploadToRedshift
 from datetime import datetime, timedelta
 
 player = PlayerCareer(player_full_name="Stephen Curry", season_type='Regular Season')
