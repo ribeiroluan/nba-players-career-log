@@ -61,7 +61,7 @@ class PlayerCareer():
         
         if self._check_if_player_exists() and self._check_if_season_type_exists():
             
-            year = 2021 #self.player_first_year
+            year = self.player_first_year
             career_dict = []
 
             while year <= self.player_last_year:
