@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from airflow.dags.scripts.player import PlayerCareer, DataWriter
+from airflow.code.player import PlayerCareer, DataWriter
 import datetime
 
 
