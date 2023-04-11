@@ -6,8 +6,6 @@ import pandas as pd
 import backoff
 import time
 from datetime import datetime
-import os
-import glob
 import logging
 
 logger = logging.getLogger(__name__)
@@ -125,11 +123,3 @@ class DataWriter():
         """Write career log to csv"""
         self._clean_data().to_csv("/opt/airflow/code/tmp/"+self._get_filename()+".csv", index=False)
         logger.info(f"Career data wrote to {self._get_filename() + '.csv'} successfully")
-
-class CleanFolder():
-
-    def clean_folder(self):
-        """Clean temp folder"""
-        files = glob.glob("/opt/airflow/code/tmp/*.csv")
-        for f in files:
-            os.remove(f)
