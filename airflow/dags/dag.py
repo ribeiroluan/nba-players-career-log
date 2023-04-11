@@ -6,7 +6,7 @@ from scripts.push_to_s3 import UploadToS3
 from scripts.push_to_redshift import UploadToRedshift
 from datetime import datetime, timedelta
 
-player = PlayerCareer(player_full_name="Stephen Curry", season_type='Regu')
+player = PlayerCareer(player_full_name="Stephen Curry", season_type='Regular Season')
 
 args = {
     'owner': 'luan',
@@ -19,3 +19,8 @@ dag = DAG(
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60)
 )
+
+task1 = PythonOperator(
+    task_id = "extract-data",
+    python_callable = DataWriter(player=player).write(),
+    dag=dag)
