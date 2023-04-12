@@ -40,8 +40,8 @@ with DAG(
         op_kwargs = {'player_full_name':'Stephen Curry', 'season_type':'Regular Season'},
         dag=dag)
     
-    task_push_to_s3_regular_season = PythonOperator(
-        task_id = "push-to-s3-rs",
+    task_push_to_s3 = PythonOperator(
+        task_id = "push-to-s3",
         python_callable = _push_to_s3,
         dag=dag)
 
@@ -62,17 +62,12 @@ with DAG(
         op_kwargs = {'player_full_name':'Stephen Curry', 'season_type':'Playoffs'},
         dag=dag)
     
-    task_push_to_s3_playoffs = PythonOperator(
-        task_id = "push-to-s3-playoffs",
-        python_callable = _push_to_s3,
-        dag=dag)
-    
     task_push_to_redshift_playoffs = PythonOperator(
         task_id = "push-to-redshift-playoffs",
         python_callable = _push_to_redshift,
         op_kwargs = {'season_type':'Playoffs'},
         dag=dag)
     
-task_extract_and_write_regular_season >> task_push_to_s3_regular_season
-task_extract_and_write_playoffs >> task_push_to_s3_playoffs
-[task_push_to_s3_regular_season, task_push_to_s3_playoffs] >> task_push_to_redshift_regular_season >>  task_push_to_redshift_playoffs >> task_clean_temp_folder
+task_extract_and_write_regular_season >> task_push_to_s3
+task_extract_and_write_playoffs >> task_push_to_s3
+[task_push_to_s3, task_push_to_s3] >> task_push_to_redshift_regular_season >>  task_push_to_redshift_playoffs >> task_clean_temp_folder
