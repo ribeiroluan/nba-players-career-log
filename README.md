@@ -16,6 +16,10 @@ The project aimed to take advantage of NBA data, which is something that I am re
 4. Schedule and monitor pipeline using [Apache Airflow](https://airflow.apache.org/) on [Docker Compose](https://docs.docker.com/compose/)
 5. Generate charts using [Power BI](https://powerbi.microsoft.com/)
 
+Shown below is the Directed Acyclic Graph (DAG) generated using Airflow.
+
+![DAG](/images/dag.png "DAG")
+
 ## Output
 `PowerBI dashboard goes here`
 
