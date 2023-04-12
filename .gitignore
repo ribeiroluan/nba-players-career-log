@@ -211,7 +211,6 @@ pip-selfcheck.json
 .venv
 .env
 tmp
-credenciais.txt
 logs
 plugins
 settings.json
