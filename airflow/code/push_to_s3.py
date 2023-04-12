@@ -16,7 +16,7 @@ class UploadToS3:
 
     def __init__(self):
         """Load AWS credentials"""
-        load_dotenv('.env')
+        load_dotenv()
         self.aws_id = getenv('AWS_ID')
         self.aws_key = getenv('AWS_KEY')
         self.bucket_name = getenv('BUCKET_NAME')

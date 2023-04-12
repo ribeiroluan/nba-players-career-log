@@ -1,6 +1,7 @@
-from player import PlayerCareer, DataWriter, CleanFolder
+from player import PlayerCareer, DataWriter
 from push_to_s3 import UploadToS3
 from push_to_redshift import UploadToRedshift
+from folder_cleaner import CleanFolder
 
 if __name__ == "__main__":
     for season_type_var in ('Regular Season', 'Playoffs'):

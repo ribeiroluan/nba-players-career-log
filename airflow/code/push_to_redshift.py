@@ -15,7 +15,7 @@ class UploadToRedshift:
     def __init__(self, season_type:str):
         self.season_type = season_type
         """Load AWS credentials"""
-        load_dotenv('.env')
+        load_dotenv()
         self.aws_id = getenv('AWS_ID')
         self.aws_key = getenv('AWS_KEY')
         self.username = getenv('REDSHIFT_USERNAME')

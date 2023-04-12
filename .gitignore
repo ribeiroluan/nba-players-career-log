@@ -186,8 +186,9 @@ pyvenv.cfg
 pip-selfcheck.json
 
 ### VisualStudioCode ###
+**/.vscode/
+.vscode
 .vscode/*
-!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -208,7 +209,8 @@ pip-selfcheck.json
 
 # Personal
 .venv
-tmp
 .env
-glue_job.py
-credenciais.txt
+tmp
+logs
+plugins
+settings.json

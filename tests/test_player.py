@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from player import PlayerCareer, DataWriter
+from airflow.code.player import PlayerCareer, DataWriter
 import datetime
 
 

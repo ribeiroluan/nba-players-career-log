@@ -6,8 +6,6 @@ import pandas as pd
 import backoff
 import time
 from datetime import datetime
-import os
-import glob
 import logging
 
 logger = logging.getLogger(__name__)
@@ -65,7 +63,7 @@ class PlayerCareer():
             career_dict = []
 
             while year <= self.player_last_year:
-                time.sleep(15) #avoiding timeouts
+                time.sleep(10) #avoiding timeouts
                 season_log = playergamelogs.PlayerGameLogs(
                         player_id_nullable = self.player_id, 
                         season_nullable = self._adjust_season(year),
@@ -123,13 +121,5 @@ class DataWriter():
         
     def write(self) -> None:
         """Write career log to csv"""
-        self._clean_data().to_csv("tmp/"+self._get_filename()+'.csv', index=False)
+        self._clean_data().to_csv("/opt/airflow/code/tmp/"+self._get_filename()+".csv", index=False)
         logger.info(f"Career data wrote to {self._get_filename() + '.csv'} successfully")
-
-class CleanFolder():
-
-    def clean_folder(self):
-        """Clean temp folder"""
-        files = glob.glob("tmp/*.csv")
-        for f in files:
-            os.remove(f)
