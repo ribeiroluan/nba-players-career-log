@@ -1,9 +1,8 @@
-
-
+`This README is still a work in progress`
 # NBA Player Game Log ETL Pipeline
 
 ## Overview
-This data pipeline extracts game log data for a specific player from the NBA API, transforms it into a structured format, and loads it into an AWS Redshift cluster. The data is then used to generate charts in PowerBI.
+This data pipeline extracts game log data for a specific player from the NBA API, makes some minor transformations, and loads it into an AWS S3 bucket, which is then copied into a AWS Redshift cluster. Finally, the data is used to generate charts in PowerBI. The player I chose to collect data on is [Stephen Curry](https://pt.wikipedia.org/wiki/Stephen_Curry).
 
 ## Motivation
 The project aimed to take advantage of NBA data, which is something that I am really passionate about, to practice key Data Engineering skills.
