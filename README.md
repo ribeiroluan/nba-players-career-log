@@ -20,6 +20,6 @@ Shown below is the Directed Acyclic Graph (DAG) generated using Airflow.
 ![DAG](/images/dag.png "DAG")
 
 ## Output
-`PowerBI dashboard goes here`
+PowerBI dashboard goes here
 
 ## Installation
