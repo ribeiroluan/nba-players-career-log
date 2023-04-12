@@ -186,9 +186,9 @@ pyvenv.cfg
 pip-selfcheck.json
 
 ### VisualStudioCode ###
+**/.vscode/
 .vscode
 .vscode/*
-!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -208,10 +208,10 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,ven
 
 # Personal
-.vscode
 .venv
 .env
 tmp
 credenciais.txt
 logs
 plugins
+settings.json
