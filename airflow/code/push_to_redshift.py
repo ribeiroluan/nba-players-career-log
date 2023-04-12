@@ -28,6 +28,7 @@ class UploadToRedshift:
         self.host  = getenv('REDSHIFT_HOST')
 
     def connect_to_s3(self):
+        """Connect to S3 Instance"""
         try:
             conn = boto3.client('s3',
                             aws_access_key_id = self.aws_id,
@@ -38,12 +39,14 @@ class UploadToRedshift:
             sys.exit(1)
 
     def get_latest_upload_date(self):
+        """Get last file upload date"""
         response = self.connect_to_s3().list_objects_v2(Bucket=self.bucket_name)
         all = response['Contents'] 
         latest = max(all, key=lambda x: x['LastModified'])
         return latest['Key'].split('/')[1]
 
     def get_filepath(self):
+        """Get last filepath uploaded"""
         return f"s3://{self.bucket_name}/stephencurry/{self.get_latest_upload_date()}/{self.season_type}.csv"
 
     def connect_to_redshift(self):
@@ -126,6 +129,7 @@ class UploadToRedshift:
                 logger.info(f"Error copying S3 file {self.get_filepath()} to Redshift at {datetime.datetime.now()}")
 
     def create_consolidated_career_table(self, rs_conn):
+        """Consolidate both regular season and playoff games"""
         if self.season_type == 'playoffs':
             with rs_conn:
                 try:

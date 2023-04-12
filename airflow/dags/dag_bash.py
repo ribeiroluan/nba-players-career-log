@@ -3,6 +3,11 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 
+"""
+DAG to extract NBA data, load into AWS S3, and copy to AWS Redshift using Airflow's bash operator
+"""
+
+
 schedule_interval = '@daily'
 start_date = days_ago(1)
 args = {'owner': 'luan', 'start_date': start_date, 'retries': 1}

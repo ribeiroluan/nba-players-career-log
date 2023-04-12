@@ -9,6 +9,10 @@ import push_to_s3
 import push_to_redshift
 import folder_cleaner
 
+"""
+DAG to extract NBA data, load into AWS S3, and copy to AWS Redshift using Airflow's Python operator
+"""
+
 def _extract_and_write(player_full_name:str, season_type:str):
     player_obj = player.PlayerCareer(player_full_name=player_full_name, season_type=season_type)
     player.DataWriter(player=player_obj).write()    
