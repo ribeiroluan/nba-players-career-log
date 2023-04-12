@@ -208,6 +208,7 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,ven
 
 # Personal
+.vscode
 .venv
 .env
 tmp
