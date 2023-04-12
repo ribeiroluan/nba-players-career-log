@@ -46,12 +46,11 @@ class UploadToS3:
 
     def upload_files_to_s3(self, conn):
         """Upload files to S3 Bucket if they don't already exist there"""
-        directory = 'tmp'
-        for filename in glob.iglob(f'{directory}/*'):
+        for filename in glob.iglob("/opt/airflow/code/tmp/*"):
             exists = True
-            player = filename.split('\\', 1)[1].split('-')[0]
-            extracted_at = datetime.datetime.strptime(filename.split('\\', 1)[1].split('-')[2][:8], "%Y%m%d").date()
-            season_type = filename.split('\\', 1)[1].split('-')[1]
+            player = filename.split('tmp/', 1)[1].split('-')[0]
+            extracted_at = datetime.datetime.strptime(filename.split('tmp/', 1)[1].split('-')[2][:8], "%Y%m%d").date()
+            season_type = filename.split('tmp/', 1)[1].split('-')[1]
             s3_key = f'{player}/{extracted_at}/{season_type}.csv'
 
             try:
